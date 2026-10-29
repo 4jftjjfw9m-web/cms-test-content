@@ -1,0 +1,25 @@
+{
+  "kicker": "Meet the team",
+  "heading": "The people you’ll work with",
+  "members": [
+    {
+      "name": "Alex Example, M.S. CCC-SLP",
+      "pronouns": "they/them",
+      "role": "Speech Language Pathologist",
+      "extra_line": "Founder of Example Speech Studio, LLC",
+      "email": "test@example.com",
+      "photo": "uploads/person-a.webp",
+      "photo_description": "Placeholder picture"
+    },
+    {
+      "name": "Sam Sample, M.S. CCC-SLP",
+      "role": "Speech Language Pathologist",
+      "photo": "uploads/person-b.webp",
+      "photo_description": "Placeholder picture"
+    },
+    {
+      "name": "Pat Placeholder, M.S. CCC-SLP",
+      "role": "Speech Language Pathologist"
+    }
+  ]
+}

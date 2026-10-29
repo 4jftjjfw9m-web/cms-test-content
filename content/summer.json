@@ -1,0 +1,41 @@
+{
+  "kicker": "03 · Summer 2027",
+  "heading": "Mini-intensives, at home.",
+  "intro": "Intensive therapy is backed by research showing kids tend to make significant gains in just a few short, focused weeks. Mini-intensives run in your child’s most natural environment: home. We travel to you.",
+  "numbers": [
+    {
+      "value": "60",
+      "label": "minute sessions"
+    },
+    {
+      "value": "4–5",
+      "label": "days per week"
+    },
+    {
+      "value": "2",
+      "label": "consecutive weeks"
+    }
+  ],
+  "boxes": [
+    {
+      "title": "Why intensives?",
+      "points": [
+        "Consistent language models and therapy that’s focused on short-term goals.",
+        "Daily in-home sessions let therapists understand and use your day-to-day flow, in therapy and in parent coaching."
+      ]
+    },
+    {
+      "title": "What’s unique about our model?",
+      "points": [
+        "Therapists with current, working knowledge of AAC and neurodiversity-affirming therapy.",
+        "An individualized, affirming, strengths- and interests-based, child-led model.",
+        "Unrestricted access to AAC and sensory functioning supports.",
+        "Parent and caregiver education and coaching are a priority.",
+        "We stay up to date on best practice."
+      ]
+    }
+  ],
+  "form_button_label": "Complete an interest form",
+  "form_link": "https://example.com/test-form",
+  "info_button_label": "Need more information?"
+}

@@ -1,0 +1,18 @@
+{
+  "kicker": "In families’ words",
+  "heading": "Parent testimonials",
+  "quotes": [
+    {
+      "name": "Test parent A",
+      "text": "Made-up test quote number 1. It only exists to try out the editor. Change me, then press Publish."
+    },
+    {
+      "name": "Test parent B",
+      "text": "Made-up test quote number 2. It only exists to try out the editor. Change me, then press Publish."
+    },
+    {
+      "name": "Test parent C",
+      "text": "Made-up test quote number 3. It only exists to try out the editor. Change me, then press Publish."
+    }
+  ]
+}

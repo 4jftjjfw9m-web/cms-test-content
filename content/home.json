@@ -1,0 +1,48 @@
+{
+  "hero": {
+    "kicker": "Pediatric Speech Therapy · Parent Coaching · AAC Evaluations",
+    "line1": "Providing *everyone*",
+    "line2": "with appropriate and",
+    "line3": "accessible means of **communication.**",
+    "intro": "Specializing in Augmentative & Alternative Communication (AAC), neurodiversity-affirming care, and serving clients with complex diagnoses & medical backgrounds through progressive, evidence-based, culturally sensitive practices.",
+    "button1_label": "Reach out",
+    "button1_goes_to": "#contact",
+    "button2_label": "Call or text",
+    "badge": "est. 2023"
+  },
+  "who": {
+    "heading": "Who can we help?",
+    "intro": "Supporting you in supporting the most important people in your life.",
+    "people": [
+      "AAC users",
+      "Individuals & families interested in or seeking AAC",
+      "People with communication barriers secondary to complex medical diagnoses or mobility limitations",
+      "Gestalt language processors & people who use echolalia to communicate",
+      "GLPs who use or need AAC",
+      "Parents & caregivers seeking guidance supporting their child’s communication",
+      "Professionals seeking guidance on AAC implementation or neurodiversity-affirming care",
+      "Schools seeking AAC evaluations for their students"
+    ]
+  },
+  "ways": {
+    "kicker": "Choose a path",
+    "heading": "Three ways we work with families",
+    "cards": [
+      {
+        "title": "Speech therapy",
+        "description": "In your child’s most natural environment",
+        "goes_to": "#therapy"
+      },
+      {
+        "title": "Parent & caregiver coaching",
+        "description": "Virtual, available from any state",
+        "goes_to": "#coaching"
+      },
+      {
+        "title": "Summer 2027 mini-intensives",
+        "description": "In-home, two focused weeks",
+        "goes_to": "#summer"
+      }
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "kicker": "02 · Parent & caregiver coaching",
+  "heading": "Let’s collaborate.",
+  "text": "Professional, research-based guidance on navigating your child’s communication, whether they are a current or potential AAC user, a gestalt language processor, have other communication needs or mobility limitations, or you are just unsure where to begin.\n\nThrough empathy and open-mindedness, we’re here to help you find clear, individualized and effective directives for your child’s communication.",
+  "photo": "uploads/hands.webp",
+  "photo_description": "An adult's hand gently holding a child's hand",
+  "steps_heading": "How does coaching work?",
+  "steps": [
+    {
+      "title": "Introduction",
+      "length": "30 min · virtual",
+      "text": "A virtual introduction meeting to talk through your family’s experiences and coaching needs."
+    },
+    {
+      "title": "Consultation",
+      "length": "60 min · virtual or face-to-face",
+      "text": "Clear and direct advice, collaboration and troubleshooting, resource sharing, and coaching and training individualized to fit your family’s needs."
+    },
+    {
+      "title": "Follow-up",
+      "length": "30 min · virtual",
+      "text": "A virtual follow-up meeting to tie up the loose ends."
+    }
+  ],
+  "note": "First-time participants select the 3-step coaching sequence. 45-minute follow-up consultations are available afterward. **Parent & caregiver coaching is available virtually from any state.**",
+  "button_label": "Reach out about parent coaching"
+}

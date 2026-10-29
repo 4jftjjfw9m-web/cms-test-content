@@ -1,0 +1,31 @@
+{
+  "kicker": "01 · Speech therapy",
+  "heading": "Strengths-based, inclusive and sensory-aware.",
+  "intro": "Therapy in your child’s most natural environment, individualized to meet your child’s specific goals and needs.",
+  "topics": [
+    {
+      "tab_label": "AAC",
+      "title": "Augmentative & Alternative Communication",
+      "text": "**AAC is any form of communication that adds to or replaces verbal speech.** Often, we are referring to high-tech AAC like apps or Speech Generating Devices (SGDs).\n\nSomeone might benefit from AAC if they have difficulties with verbal communication or need support through auditory or visual language representation. That includes (but isn’t limited to) people with apraxia or dyspraxia, developmental delays, cognitive impairments, traumatic brain injuries, physical disabilities, stroke, genetic conditions, degenerative diseases, cortical visual impairment (CVI), autistic folks who are nonspeaking or minimally speaking, and gestalt language processors whose language is supported with intonation-rich gestalts.",
+      "highlight": "It is our mission to provide everyone with appropriate and accessible means of communication!"
+    },
+    {
+      "tab_label": "Neurodiversity affirming",
+      "title": "Neurodiversity affirming therapy",
+      "text": "Neurodiversity-affirming care acknowledges that all neurotypes have unique strengths, interests, and support needs.\n\nIt is not our goal to “fix” neurodiversity, nor to require neurodivergent individuals to hide their neurotype, but to meet every individual where they are and support them."
+    },
+    {
+      "tab_label": "Gestalt language processing",
+      "title": "Gestalt language processing",
+      "text": "Gestalt language processors develop language in “chunks,” which might be phrases, sentences, paragraphs, or entire movies. We call these chunks “scripts” or “gestalts.” Gestalts then break into smaller parts and re-organize into self-generated language.\n\nThere are many ways to identify GLPs. The most identifiable are frequent use of echolalia or scripts to communicate, and a keen focus on intonation in speech."
+    }
+  ],
+  "quote": {
+    "text": "When a flower doesn’t bloom, you fix the environment in which it grows, not the flower.",
+    "author": "Alexander Den Heijer"
+  },
+  "funding": {
+    "title": "Funding information",
+    "text": "Example Speech Studio, LLC is **private-pay only at this time, on an income-based sliding scale**, and is an out-of-network provider with all insurance companies. Upon request, we will provide an itemized bill (a “Superbill”) with all the information you need to submit to insurance to attempt reimbursement. Reimbursement is policy-specific and is not guaranteed by, nor public information to, the provider. We recommend contacting your insurance company for reimbursement information. We are actively working on becoming in-network with insurance companies.\n\nMany families have also been successful using waiver funds to reimburse services. Please contact your social worker and/or waiver provider for more information."
+  }
+}
