@@ -1,10 +1,16 @@
-# PREVIEW LINK FOR THE EDITOR (round 5 prototype). Goes in the CONTENT repo: .github/workflows/preview-status.yml, on main.
+# PREVIEW LINK (AND PLAIN FAILURE REASON) FOR THE EDITOR (round 7). Goes in the CONTENT repo: .github/workflows/preview-status.yml, on main.
 # Why: Decap's "Check for Preview" reads GitHub COMMIT STATUSES on the draft's pull request (context "deploy/cloudflare-preview",
 # set as preview_context in config.yml). Cloudflare Pages reports builds as CHECK RUNS instead, which Decap does not read.
-# This workflow copies the preview address from Cloudflare's finished check run into a commit status. Nothing else.
+# This workflow copies the preview address from Cloudflare's finished check run into a commit status. When the Cloudflare build
+# FAILED (r7), it posts a "failure" status whose description is the one-line reason in plain words (for example "photo x.jpg needs
+# re-uploading: ..."); the editor shows it (editor-tools.js; Decap itself drops status descriptions). Cloudflare's check run does
+# not contain the build log, so the reason is found by running the SAME pinned kit (KIT_SHA below = the sha256 in the Cloudflare
+# build command) on the SAME commit here; if that does not reproduce the failure, a generic message is posted instead.
 # Safety: check_run workflows always run the copy of this file on the DEFAULT branch, so a draft branch cannot change it.
-# The token can only read checks and write statuses (no contents, no pull requests); no secrets; no checkout; no third-party
-# actions. Event text is passed through env (never pasted into the script), and the address must be an https address of
+# The token can only read checks and write statuses (the failure job: read contents and write statuses) (no pull requests, no pushes); no secrets; no checkout; no
+# third-party actions. The token is given ONLY to the download and the status steps, never to the step that runs the build (that step has no token or
+# secrets, but it does have network access).
+# The kit is downloaded from the admin origin and must match KIT_SHA, so nothing from the content repo is run (content is data). Event text is passed through env (never pasted into the script), and the address must be an https address of
 # PREVIEW_PROJECT's *.pages.dev, so a look-alike or a link to another site is ignored.
 # The GitHub App that reports Pages builds is "Cloudflare Workers and Pages" (slug cloudflare-workers-and-pages); confirm the
 # slug on the first real run (Actions log of a skipped run shows it in the event, or the check run's app on the PR).
@@ -40,3 +46,58 @@ jobs:
           curl -fsS -X POST -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/$REPO/statuses/$SHA" -d "$body" > /dev/null
           echo "status set: $url"
+
+  failure:
+    if: github.event.check_run.app.slug == 'cloudflare-workers-and-pages' && contains(fromJSON('["failure","timed_out"]'), github.event.check_run.conclusion)
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    permissions:          # r7b: job-level, replaces the top-level set for this job only
+      contents: read      # only to download the failed commit's content as a tarball
+      statuses: write     # to post the failure status
+    env:
+      SHA: ${{ github.event.check_run.head_sha }}
+      KIT_URL: https://cms-admin-test.pages.dev/preview-kit.tar.gz   # CHANGE per client: <admin origin>/preview-kit.tar.gz
+      KIT_SHA: 2fd4beb8cd1a3789e92d0df80763764087e7096b57b61c81e48e075f538ad171                          # CHANGE with every new kit: the sha256 in the build command
+    steps:
+      - name: Download the failed commit's content (data only)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          [[ "$SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "unexpected commit id"; exit 1; }
+          curl -fsSL --max-filesize 200000000 -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/tarball/$SHA" -o "$RUNNER_TEMP/content.tgz"
+      - name: Re-run the pinned preview build to find the reason (no token or secrets in this step; it has network access)
+        run: |
+          set -uo pipefail
+          reason=""
+          if [[ "$KIT_URL" =~ ^https://[a-z0-9.-]+/preview-kit\.tar\.gz$ && "$KIT_SHA" =~ ^[0-9a-f]{64}$ ]] \
+             && curl -fsSL --max-filesize 50000000 "$KIT_URL" -o "$RUNNER_TEMP/kit.tgz" \
+             && echo "$KIT_SHA  $RUNNER_TEMP/kit.tgz" | sha256sum -c - ; then
+            mkdir -p "$RUNNER_TEMP/kit" "$RUNNER_TEMP/c"
+            tar -xzf "$RUNNER_TEMP/kit.tgz" -C "$RUNNER_TEMP/kit" --no-same-owner
+            tar -xzf "$RUNNER_TEMP/content.tgz" -C "$RUNNER_TEMP/c" --strip-components=1 --no-same-owner
+            finish=$(find "$RUNNER_TEMP/kit" -mindepth 3 -maxdepth 3 -path '*/cms/preview-finish.mjs' | head -n1)
+            if [ -n "$finish" ]; then
+              out=$(cd "$RUNNER_TEMP/c" && env -i PATH="$PATH" HOME="$RUNNER_TEMP" SKIP_DEPENDENCY_INSTALL=1 timeout 120 node "$finish" 2>&1 || true)
+              # only the one line preview-finish prints on purpose; printable ASCII, at most 130 characters (status limit 140)
+              reason=$(printf '%s\n' "$out" | grep -m1 '^PREVIEW BUILD REFUSED: ' | sed 's/^PREVIEW BUILD REFUSED: //' | LC_ALL=C tr -cd '\40-\176' | cut -c1-130 || true)
+            fi
+          else
+            echo "kit missing or not the pinned one (update KIT_URL/KIT_SHA in this file); using the generic message"
+          fi
+          [ -n "$reason" ] || reason="Ask Riverlight to check the Cloudflare preview build log."
+          printf '%s' "$reason" > "$RUNNER_TEMP/reason.txt"
+          echo "reason: $reason"
+      - name: Post the failure as a commit status
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          reason=$(LC_ALL=C tr -cd '\40-\176' < "$RUNNER_TEMP/reason.txt" | cut -c1-130)
+          body=$(jq -cn --arg d "$reason" '{state:"failure", context:"deploy/cloudflare-preview", description:$d}')
+          curl -fsS -X POST -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/statuses/$SHA" -d "$body" > /dev/null
+          echo "failure status set"
