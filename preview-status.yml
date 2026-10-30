@@ -1,0 +1,42 @@
+# PREVIEW LINK FOR THE EDITOR (round 5 prototype). Goes in the CONTENT repo: .github/workflows/preview-status.yml, on main.
+# Why: Decap's "Check for Preview" reads GitHub COMMIT STATUSES on the draft's pull request (context "deploy/cloudflare-preview",
+# set as preview_context in config.yml). Cloudflare Pages reports builds as CHECK RUNS instead, which Decap does not read.
+# This workflow copies the preview address from Cloudflare's finished check run into a commit status. Nothing else.
+# Safety: check_run workflows always run the copy of this file on the DEFAULT branch, so a draft branch cannot change it.
+# The token can only read checks and write statuses (no contents, no pull requests); no secrets; no checkout; no third-party
+# actions. Event text is passed through env (never pasted into the script), and the address must be an https address of
+# PREVIEW_PROJECT's *.pages.dev, so a look-alike or a link to another site is ignored.
+# The GitHub App that reports Pages builds is "Cloudflare Workers and Pages" (slug cloudflare-workers-and-pages); confirm the
+# slug on the first real run (Actions log of a skipped run shows it in the event, or the check run's app on the PR).
+name: Preview link for the editor
+on:
+  check_run:
+    types: [completed]
+permissions:
+  checks: read
+  statuses: write
+jobs:
+  status:
+    if: github.event.check_run.app.slug == 'cloudflare-workers-and-pages' && github.event.check_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Publish the preview address as a commit status
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.event.check_run.head_sha }}
+          SUMMARY: ${{ github.event.check_run.output.summary }}
+          PREVIEW_PROJECT: cms-preview-test     # CHANGE per client: the preview Pages project name
+        run: |
+          set -euo pipefail
+          [[ "$SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "unexpected commit id"; exit 1; }
+          [[ "$PREVIEW_PROJECT" =~ ^[a-z0-9-]+$ ]] || { echo "bad PREVIEW_PROJECT"; exit 1; }
+          urls=$(printf '%s\n' "$SUMMARY" | grep -oE "https://[a-z0-9-]+\.${PREVIEW_PROJECT}\.pages\.dev([^A-Za-z0-9.:@-]|$)" | grep -oE "^https://[a-z0-9-]+\.${PREVIEW_PROJECT}\.pages\.dev" || true)
+          url=$(printf '%s\n' "$urls" | grep -E "^https://[0-9a-f]{8}\." | head -n1 || true)    # the fixed address of this exact build
+          [ -n "$url" ] || url=$(printf '%s\n' "$urls" | head -n1)
+          if [ -z "$url" ]; then echo "no preview address for ${PREVIEW_PROJECT} in this check run; nothing to do"; exit 0; fi
+          body=$(jq -cn --arg u "$url" '{state:"success", context:"deploy/cloudflare-preview", target_url:$u, description:"Preview ready (private)"}')
+          curl -fsS -X POST -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/statuses/$SHA" -d "$body" > /dev/null
+          echo "status set: $url"
