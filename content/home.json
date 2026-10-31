@@ -1,10 +1,10 @@
 {
   "hero": {
     "badge": "est. 2023",
-    "button1_goes_to": "#contact",
+    "button1_goes_to": "#team",
     "intro": "is this going to work? I don't know",
     "kicker": "DID IT ACTUALLY WORK",
-    "button1_label": "Reach out",
+    "button1_label": "See the team",
     "button2_label": "Call or text",
     "line1": "Providing *everyone*",
     "line2": "with appropriate and",
