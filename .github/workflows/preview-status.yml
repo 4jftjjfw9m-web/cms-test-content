@@ -39,9 +39,10 @@ jobs:
           [[ "$SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "unexpected commit id"; exit 1; }
           [[ "$PREVIEW_PROJECT" =~ ^[a-z0-9-]+$ ]] || { echo "bad PREVIEW_PROJECT"; exit 1; }
           urls=$(printf '%s\n' "$SUMMARY" | grep -oE "https://[a-z0-9-]+\.${PREVIEW_PROJECT}\.pages\.dev([^A-Za-z0-9.:@-]|$)" | grep -oE "^https://[a-z0-9-]+\.${PREVIEW_PROJECT}\.pages\.dev" || true)
-          url=$(printf '%s\n' "$urls" | grep -E "^https://[0-9a-f]{8}\." | head -n1 || true)    # the fixed address of this exact build
-          [ -n "$url" ] || url=$(printf '%s\n' "$urls" | head -n1)
-          if [ -z "$url" ]; then echo "no preview address for ${PREVIEW_PROJECT} in this check run; nothing to do"; exit 0; fi
+          # r7c: ONLY the per-commit address (8 hex digits) of this exact build; never the branch alias, which can show a newer or
+          # older commit than the one this status is for
+          url=$(printf '%s\n' "$urls" | grep -E "^https://[0-9a-f]{8}\.${PREVIEW_PROJECT}\.pages\.dev$" | head -n1 || true)
+          if [ -z "$url" ]; then echo "no per-commit preview address for ${PREVIEW_PROJECT} in this check run; nothing to do"; exit 0; fi
           body=$(jq -cn --arg u "$url" '{state:"success", context:"deploy/cloudflare-preview", target_url:$u, description:"Preview ready (private)"}')
           curl -fsS -X POST -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/$REPO/statuses/$SHA" -d "$body" > /dev/null
