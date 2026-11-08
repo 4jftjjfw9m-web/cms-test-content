@@ -7,9 +7,9 @@
   "show": true,
   "booking": {
     "show": true,
-    "kicker": "Test",
-    "heading": "test",
-    "intro": "test",
+    "kicker": "Scheduling",
+    "heading": "Pick a Meeting Time for Intensive Therapy",
+    "intro": "(Intensive therapy description)",
     "embed_url": "https://calendar.google.com/calendar/appointments/schedules/AcZssZ2M9HEIWyknwEAocBteClkAE5YQuU0Mm63t5zWFJYTVv3gFcFCzmMRlOUOJLAS-tzCq6F9VrXqk?gv=true",
     "fallback_text": "Test"
   }
