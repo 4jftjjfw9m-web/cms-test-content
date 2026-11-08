@@ -7,6 +7,7 @@
     "button1_label": "See the team",
     "button2_label": "Call or text",
     "line1": "Providing *everyone*",
+    "show": false,
     "line2": "with appropriate and",
     "line3": "accessible means of **communication.**"
   },
@@ -22,7 +23,8 @@
       "Parents & caregivers seeking guidance supporting their child’s communication",
       "Professionals seeking guidance on AAC implementation or neurodiversity-affirming care",
       "Schools seeking AAC evaluations for their students"
-    ]
+    ],
+    "show": true
   },
   "ways": {
     "kicker": "Choose a path",
@@ -43,6 +45,7 @@
         "description": "In-home, two focused weeks",
         "goes_to": "#summer"
       }
-    ]
+    ],
+    "show": true
   }
 }
