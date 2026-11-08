@@ -33,7 +33,7 @@ jobs:
           REPO: ${{ github.repository }}
           SHA: ${{ github.event.check_run.head_sha }}
           SUMMARY: ${{ github.event.check_run.output.summary }}
-          PREVIEW_PROJECT: cms-preview-test     # CHANGE per client: the preview Pages project name
+          PREVIEW_PROJECT: cms-preview-test     # filled in by new-client.sh: the preview Pages project name
         run: |
           set -euo pipefail
           [[ "$SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "unexpected commit id"; exit 1; }
@@ -43,7 +43,7 @@ jobs:
           # older commit than the one this status is for
           url=$(printf '%s\n' "$urls" | grep -E "^https://[0-9a-f]{8}\.${PREVIEW_PROJECT}\.pages\.dev$" | head -n1 || true)
           if [ -z "$url" ]; then echo "no per-commit preview address for ${PREVIEW_PROJECT} in this check run; nothing to do"; exit 0; fi
-          body=$(jq -cn --arg u "$url" '{state:"success", context:"deploy/cloudflare-preview", target_url:$u, description:"Preview ready (private)"}')
+          body=$(jq -cn --arg u "$url" '{state:"success", context:"deploy/cloudflare-preview", target_url:$u, description:"Preview ready"}')
           curl -fsS -X POST -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/$REPO/statuses/$SHA" -d "$body" > /dev/null
           echo "status set: $url"
@@ -57,8 +57,8 @@ jobs:
       statuses: write     # to post the failure status
     env:
       SHA: ${{ github.event.check_run.head_sha }}
-      KIT_URL: https://cms-admin-test.pages.dev/preview-kit.tar.gz   # CHANGE per client: <admin origin>/preview-kit.tar.gz
-      KIT_SHA: 2fd4beb8cd1a3789e92d0df80763764087e7096b57b61c81e48e075f538ad171                          # CHANGE with every new kit: the sha256 in the build command
+      KIT_URL: https://cms-admin-test.pages.dev/preview-kit.tar.gz   # filled in by new-client.sh: THIS client's admin origin serves its own kit
+      KIT_SHA: 938c7a233ae278c5bc6c56a358e2dcbc13007ea9b24f366f6d8d2884b189cf8c   # filled in by new-client.sh: the kit's sha256 (the same one as in the preview project's build command)
     steps:
       - name: Download the failed commit's content (data only)
         env:
