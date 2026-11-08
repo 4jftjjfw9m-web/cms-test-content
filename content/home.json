@@ -7,7 +7,7 @@
     "button1_label": "See the team",
     "button2_label": "Call or text",
     "line1": "Providing *everyone*",
-    "show": false,
+    "show": true,
     "line2": "with appropriate and",
     "line3": "accessible means of **communication.**"
   },
