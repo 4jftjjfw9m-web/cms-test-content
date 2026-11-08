@@ -3,5 +3,14 @@
   "heading": "Let’s chat!",
   "email": "test@example.com",
   "phone": "555-0100",
-  "note": "Speech therapy happens in your child’s natural environment, and parent coaching is available virtually from any state."
+  "note": "Speech therapy happens in your child’s natural environment, and parent coaching is available virtually from any state.",
+  "show": true,
+  "booking": {
+    "show": true,
+    "kicker": "Test",
+    "heading": "test",
+    "intro": "test",
+    "embed_url": "https://calendar.google.com/calendar/appointments/schedules/AcZssZ2M9HEIWyknwEAocBteClkAE5YQuU0Mm63t5zWFJYTVv3gFcFCzmMRlOUOJLAS-tzCq6F9VrXqk?gv=true",
+    "fallback_text": "Test"
+  }
 }
